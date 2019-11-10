@@ -1,11 +1,4 @@
-import { html } from 'lighterhtml';
 import './styles.scss';
-
-const API_URL = 'https://hacker-news.firebaseio.com/v0';
-
-export function rafPromise() {
-  return new Promise(requestAnimationFrame);
-}
 
 interface story {
   by: string;
@@ -18,80 +11,120 @@ interface story {
   url: string;
 }
 
-const DEFAULT_HEIGHT = 40;
-const POST = 10;
-const PRE = 3;
-
 (async () => {
-  let nextIndexToRender = 0;
-  const processedIndexArray: number[] = [];
+  const API_URL = 'https://hacker-news.firebaseio.com/v0';
+  const STORIES_TO_FETCH = 10;
+
+  let firstIndexToRender = 0;
+  let lastIndexToRender = -1; // counteract for first fetch
+
+  const processedIndexes: number[] = [];
+  const processedStories: story[] = [];
+  const workingIndexSet = new Set<number>();
   let renderQueue: number[] = [];
   const list = document.querySelectorAll('.list')[0];
-  const window = document.querySelectorAll('.window')[0];
-  const h = window.getBoundingClientRect().height;
-  const n = Math.round(h / DEFAULT_HEIGHT);
 
-  const fetchStories = async () => {
+  // fetches an array of new stories. called once on app load
+  const fetchAllNewStories = async () => {
     const response = await fetch(`${API_URL}/newstories.json`);
-    const parsed = await response.json();
+    const parsed = (await response.json()) as Promise<number[]>;
     return parsed;
   };
 
-  const fetchItem = async (item: number, i: number) => {
+  // fetches a single story
+  const fetchStory = async (item: number) => {
     const response = await fetch(`${API_URL}/item/${item}.json`);
-    const parsed = await response.json();
-    batchItems(i);
+    const parsed = (await response.json()) as Promise<story>;
     return parsed;
   };
 
-  const batchItems = async (i: number) => {
-    processedIndexArray.push(i);
-
-    if (i > nextIndexToRender) {
+  const fetchNextBatch = () => {
+    // return if there are any in the workingIndexSet
+    if (workingIndexSet.size) {
       return;
     }
 
+    lastIndexToRender += STORIES_TO_FETCH;
+
+    console.log('first and last', firstIndexToRender, lastIndexToRender);
+
+    // add n=STORIES_TO_FETCH indexes to the working set
+    for (let i = firstIndexToRender; i <= lastIndexToRender; i++) {
+      workingIndexSet.add(i);
+    }
+
+    // add them to the processed stories array
+    workingIndexSet.forEach(async storyIndex => {
+      processedStories[storyIndex] = await fetchStory(newStoryIDs[storyIndex]);
+      // when it's done fetching, add to the pipeline
+      addToBatchPipeline(storyIndex);
+    });
+  };
+
+  // batch by network response, sort and push to render queue
+  const addToBatchPipeline = (index: number) => {
     const currentBatch: number[] = [];
 
-    for (let j = nextIndexToRender; j < workingSubset.length; j++) {
-      if (processedIndexArray.includes(j)) {
-        currentBatch.push(j);
+    processedIndexes.push(index);
+
+    let i = firstIndexToRender;
+
+    for (; i <= lastIndexToRender; i++) {
+      if (processedIndexes.includes(i)) {
+        currentBatch.push(i);
+        workingIndexSet.delete(i);
       } else {
-        nextIndexToRender = j;
         break;
       }
     }
 
-    // RENDER STUFF
-    pushToRenderQueue(currentBatch);
+    firstIndexToRender = i;
+
+    if (currentBatch.length) {
+      pushToRenderQueue(currentBatch);
+    }
   };
 
+  // batch by frames and render
   const pushToRenderQueue = async (currentBatch: number[]) => {
     renderQueue.push(...currentBatch);
-    const raf = await rafPromise();
-    if (!renderQueue.length) {
+    await new Promise(requestAnimationFrame);
+
+    if (renderQueue.length === 0) {
       return;
     }
-    console.log(renderQueue, raf);
-    renderQueue = [];
+
+    console.log(currentBatch);
+    render();
   };
 
-  // console.log(n);
-  const stories: number[] = await fetchStories();
+  // batch by DOM nodes and append to DOM
+  const render = async () => {
+    const fragment = new DocumentFragment();
 
-  const workingSubset = stories.slice(0, 20);
+    renderQueue.forEach(index => {
+      const item: story = processedStories[index];
+      const x = document
+        .createRange()
+        .createContextualFragment(
+          `<div class="list-item">${index + 1}. ${item.title}</div>`,
+        );
 
-  const promiseArray = await Promise.all(
-    workingSubset.map((id: number, i) => fetchItem(id, i)),
-  );
+      fragment.append(x);
+    });
 
-  // const items: story[] = await Promise.all(promiseArray.filter(Boolean));
+    list.append(fragment);
 
-  // items.forEach(item =>
-  //   list.appendChild(
-  //     html`
-  //       <div class="list-item">${item.title}</div>
-  //     `,
-  //   ),
-  // );
+    renderQueue = [];
+
+    return true;
+  };
+
+  // START
+  const newStoryIDs = await fetchAllNewStories();
+
+  const btn = document.getElementById('more');
+  btn.addEventListener('click', fetchNextBatch);
+
+  fetchNextBatch();
 })();
