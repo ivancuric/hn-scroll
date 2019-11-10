@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "esnext",
     "jsx": "preserve",
     "esModuleInterop": true,
     "sourceMap": true,
     "allowJs": true,
-    "target": "es2020",
+    "target": "esnext",
     "rootDir": "src",
     "moduleResolution": "node"
   }
