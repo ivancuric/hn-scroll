@@ -7,12 +7,7 @@
     "start": "parcel index.html --open",
     "build": "parcel build index.html"
   },
-  "dependencies": {
-    "axios": "0.19.0",
-    "ky": "0.15.0",
-    "lighterhtml": "1.4.1",
-    "on-change": "1.6.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "parcel-bundler": "^1.6.1"
   },

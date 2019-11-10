@@ -2,12 +2,14 @@
   <head>
     <title>HN infinite scroll</title>
     <meta charset="UTF-8" />
-    <!-- <link rel="stylesheet" href="src/styles.scss" /> -->
+    <link rel="stylesheet" href="src/styles.scss" />
   </head>
 
   <body>
-    <button id="more">Load more</button>
-    <div class="list"></div>
+    <ol id="list"></ol>
+    <div class="sentinel-container">
+      <div id="sentinel"></div>
+    </div>
 
     <script src="src/index.ts"></script>
   </body>

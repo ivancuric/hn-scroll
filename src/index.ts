@@ -1,5 +1,3 @@
-import './styles.scss';
-
 interface story {
   by: string;
   descendants: number;
@@ -13,16 +11,17 @@ interface story {
 
 (async () => {
   const API_URL = 'https://hacker-news.firebaseio.com/v0';
-  const STORIES_TO_FETCH = 10;
+  const STORIES_TO_FETCH = 20;
 
   let firstIndexToRender = 0;
-  let lastIndexToRender = -1; // counteract for first fetch
+  let lastIndexToRender = -1; // compensate for first iteration cycle
 
+  let screenFull = false;
   const processedIndexes: number[] = [];
   const processedStories: story[] = [];
   const workingIndexSet = new Set<number>();
   let renderQueue: number[] = [];
-  const list = document.querySelectorAll('.list')[0];
+  const list = document.getElementById('list');
 
   // fetches an array of new stories. called once on app load
   const fetchAllNewStories = async () => {
@@ -46,7 +45,11 @@ interface story {
 
     lastIndexToRender += STORIES_TO_FETCH;
 
-    console.log('first and last', firstIndexToRender, lastIndexToRender);
+    if (lastIndexToRender >= newStoryIDs.length) {
+      lastIndexToRender = newStoryIDs.length - 1;
+    }
+
+    // console.log('first and last', firstIndexToRender, lastIndexToRender);
 
     // add n=STORIES_TO_FETCH indexes to the working set
     for (let i = firstIndexToRender; i <= lastIndexToRender; i++) {
@@ -94,8 +97,12 @@ interface story {
       return;
     }
 
-    console.log(currentBatch);
-    render();
+    // console.log(currentBatch);
+    await render();
+
+    if (!screenFull) {
+      fetchNextBatch();
+    }
   };
 
   // batch by DOM nodes and append to DOM
@@ -106,9 +113,7 @@ interface story {
       const item: story = processedStories[index];
       const x = document
         .createRange()
-        .createContextualFragment(
-          `<div class="list-item">${index + 1}. ${item.title}</div>`,
-        );
+        .createContextualFragment(`<li class="list-item">${item.title}</li>`);
 
       fragment.append(x);
     });
@@ -123,8 +128,18 @@ interface story {
   // START
   const newStoryIDs = await fetchAllNewStories();
 
-  const btn = document.getElementById('more');
-  btn.addEventListener('click', fetchNextBatch);
-
   fetchNextBatch();
+
+  const sentinel = document.getElementById('sentinel');
+
+  let observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      // fetchNextBatch();
+      screenFull = !entry.isIntersecting;
+      if (entry.isIntersecting) {
+        fetchNextBatch();
+      }
+    });
+  });
+  observer.observe(sentinel);
 })();
