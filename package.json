@@ -16,10 +16,11 @@
     "typescript": "^3.7.2"
   },
   "cache": {
-    "inDev": true,
+    "inDev": false,
     "strategy": "inject",
     "swSrc": "./src/sw.js",
     "swDest": "sw.js"
   },
-  "keywords": []
+  "keywords": [],
+  "dependencies": {}
 }

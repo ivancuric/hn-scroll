@@ -19,15 +19,11 @@ Taking into account the requirements and the evaluation criteria for the task I'
 
 The app is written in a way to minimize re-rendering and to display content as soon as possible without the need to reorder it. The responses are batched by network responses, animation frames and finally batched into a single DOM update.
 
-Since the app is quite simple, I thought that it's easier to write the app logic in a single file while also being more readable.
-
-I've also written it as an async IIFE instead of a `class` to make it more readable with less `this.x` going around.
-
-In case the app functionality needs to be expanded it's easy to extract the functionality into separate files and/or modules.
+I've also written it as an IIFE instead of a `class` to make it more readable with less `this.x` going around.
 
 The app is using [Workbox](https://developers.google.com/web/tools/workbox) and service workers to cache responses and provide offline functionality.
 
-The app has zero dependencies (without the service worker) and is under 1KB before gzipping.
+The app has zero dependencies (without the service worker) and is under 2KB before gzipping, a lot of it being [Parcel](https://parceljs.org/)'s module loader.
 
 ## Thoughts and potential for upgrades
 
@@ -35,7 +31,12 @@ Since most of the logic is fetching data and batching network responses, it's ea
 
 The same data fetching could be done in a service worker, but since the JS thread is doing very little work it would be overkill.
 
-I've thought about implementing a DOM node recycler, but there is no need in this case, since the entire DOM is taking a minimal amount of memory. In case one was needed it would probably use a premade solution like [react-window](https://github.com/bvaughn/react-window)
+I've thought about implementing a DOM node recycler, but there is no need in this case, since the entire DOM is taking a minimal amount of memory. In case one was needed a premade solution like [react-window](https://github.com/bvaughn/react-window) could be used.
+
+The app is built as a single component with an internal state and methods. The current implementation pipeline is built as a chain of side-effects working on the internal state:  
+`fetchNextBatch => addToBatchPipeline => pushToRenderQueue => render => fetchNextBatch (optional)`
+
+Most of this could be decoupled but would add a lot of additional complexity.
 
 The design is very rudimentary (true to the original 😅). I didn't want to spend a lot of time desiging as it's not a part of the evaluation criteria, so I went with a GitHub markdown-like look.
 
