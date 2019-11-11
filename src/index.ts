@@ -3,6 +3,7 @@ import { Story } from './types';
 (async () => {
   const API_URL = 'https://hacker-news.firebaseio.com/v0';
   const STORIES_TO_FETCH = 20;
+  const DEBUG_BATCHES = false; // set to true to see batches
 
   let firstIndexToRender = 0;
   let lastIndexToRender = -1; // compensate for first iteration cycle
@@ -105,8 +106,6 @@ import { Story } from './types';
       return;
     }
 
-    /*  Uncomment next line to see batching in action in the console */
-    // console.log(currentBatch);
     await render();
 
     if (!screenFull) {
@@ -117,6 +116,12 @@ import { Story } from './types';
   // batch by DOM nodes and append to DOM
   const render = async () => {
     const fragment = new DocumentFragment();
+
+    if (DEBUG_BATCHES) {
+      fragment.append(
+        document.createRange().createContextualFragment('---------'),
+      );
+    }
 
     renderQueue.forEach(index => {
       const item: Story = processedStories[index];

@@ -41,4 +41,6 @@ The design is very rudimentary (true to the original 😅). I didn't want to spe
 
 The UX is also a bit rough since there are no helpful error messages or loading indicators presented to the user. This is the area where most work could be done.
 
-Additionally, the scrolling could be made non-blocking by using tombstones/placeholders, viewport-dependent fetching in batches and allowing for non-sequential fetches. This would also require some FLIP animations to compensate for viewport shifting.
+The scrolling could be made non-blocking by using tombstones/placeholders. This would also allow for viewport-dependent fetching in batches and non-sequential fetches. This would also require compensation for viewport shifting, ideally using [FLIP](https://aerotwist.com/blog/flip-your-animations/).
+
+Aditionally, the fetching/rendering could potentially be a bit faster by listening to `scroll` events instead of `intersectionObserver`. Even though `scroll` events are passive, `intersectionObserver` uses `requestIdleCallback` under the hood, meaning that it's throttled down even more. This approach would also require additional work, like reacting to `resize` events.
