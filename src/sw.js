@@ -15,7 +15,22 @@ workbox.routing.registerNavigationRoute('__PUBLIC/index.html');
 workbox.routing.registerRoute(
   new RegExp(/https:\/\/hacker-news\.firebaseio\.com\/v0\/item\/\d*\.json/),
   new workbox.strategies.CacheFirst({
-    cacheName: 'hacker-news-offline',
+    cacheName: 'hn-offline-items',
+    plugins: [
+      new workbox.cacheableResponse.Plugin({
+        statuses: [0, 200],
+      }),
+      new workbox.expiration.Plugin({
+        maxAgeSeconds: 60 * 60 * 24,
+      }),
+    ],
+  }),
+);
+
+workbox.routing.registerRoute(
+  new RegExp(/https:\/\/hacker-news\.firebaseio\.com\/v0\/newstories\.json/),
+  new workbox.strategies.NetworkFirst({
+    cacheName: 'hn-offline-new',
     plugins: [
       new workbox.cacheableResponse.Plugin({
         statuses: [0, 200],

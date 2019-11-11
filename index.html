@@ -15,11 +15,19 @@
 
     <script src="src/index.ts"></script>
     <script>
-      const x = 'sw.js';
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register(x);
-        });
+        const x = 'sw.js';
+        navigator.serviceWorker
+          .register(x)
+          .then(function(registration) {
+            console.log(
+              'Registration successful, scope is:',
+              registration.scope,
+            );
+          })
+          .catch(function(error) {
+            console.log('Service worker registration failed, error:', error);
+          });
       }
     </script>
   </body>
