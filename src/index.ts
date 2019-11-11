@@ -98,7 +98,7 @@ import { Story } from './types';
       return;
     }
 
-    // Uncomment next line to see batching in action in the console
+    /*  Uncomment next line to see batching in action in the console */
     // console.log(currentBatch);
     await render();
 

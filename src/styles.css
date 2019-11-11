@@ -1,5 +1,6 @@
 body {
   font-size: 20px;
+  padding: 24px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
@@ -12,13 +13,16 @@ body {
   padding: 0;
 }
 
-div {
-  min-height: 0;
-  min-width: 0;
+h1 {
+  margin-bottom: 1em;
+}
+
+#list {
+  display: grid;
+  gap: 1em;
 }
 
 .list-item {
-  padding: 0.5em 1.5em;
   contain: content;
   display: flex;
 }
@@ -38,6 +42,7 @@ div {
   contain: strict;
   pointer-events: none;
   z-index: -1;
+  /* background: #bada55; */
 }
 
 .sentinel-container {

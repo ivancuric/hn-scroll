@@ -7,10 +7,19 @@
     "start": "parcel index.html --open",
     "build": "parcel build index.html"
   },
-  "browserslist": ["last 1 Chrome version"],
-  "dependencies": {},
+  "browserslist": [
+    "last 1 Chrome version"
+  ],
   "devDependencies": {
-    "parcel-bundler": "^1.6.1"
+    "parcel-bundler": "^1.6.1",
+    "parcel-plugin-sw-cache": "^0.3.1",
+    "typescript": "^3.7.2"
+  },
+  "cache": {
+    "inDev": true,
+    "strategy": "inject",
+    "swSrc": "./src/sw.js",
+    "swDest": "sw.js"
   },
   "keywords": []
 }

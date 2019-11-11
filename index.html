@@ -7,11 +7,20 @@
   </head>
 
   <body>
+    <h1>Hacker News Story List</h1>
     <ol id="list"></ol>
     <div class="sentinel-container">
       <div id="sentinel"></div>
     </div>
 
     <script src="src/index.ts"></script>
+    <script>
+      const x = 'sw.js';
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register(x);
+        });
+      }
+    </script>
   </body>
 </html>
