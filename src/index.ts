@@ -41,8 +41,8 @@ import { Story } from './types';
   };
 
   const fetchNextBatch = () => {
-    // return if there are any in the workingIndexSet
-    if (workingIndexes.size) {
+    // return if there are any in the workingIndexSet + make TS happy
+    if (workingIndexes.size || !newStoryIDs) {
       return;
     }
 
@@ -59,7 +59,14 @@ import { Story } from './types';
 
     // add them to the processed stories array
     workingIndexes.forEach(async storyIndex => {
-      processedStories[storyIndex] = await fetchStory(newStoryIDs[storyIndex]);
+      const story = await fetchStory(newStoryIDs[storyIndex]).catch(() =>
+        console.error(`Error fetching story ${newStoryIDs[storyIndex]}`),
+      );
+
+      if (!story) {
+        return;
+      }
+      processedStories[storyIndex] = story;
       // when it's done fetching, add to the pipeline
       addToBatchPipeline(storyIndex);
     });
@@ -131,6 +138,11 @@ import { Story } from './types';
   };
 
   // START
-  const newStoryIDs = await fetchAllNewStories();
-  observer.observe(sentinel);
+  const newStoryIDs = await fetchAllNewStories().catch(() => {
+    console.error('error in fetching posts');
+  });
+
+  if (newStoryIDs) {
+    observer.observe(sentinel);
+  }
 })();
