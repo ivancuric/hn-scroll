@@ -11,7 +11,7 @@
     "last 1 Chrome version"
   ],
   "devDependencies": {
-    "parcel-bundler": "^1.6.1",
+    "parcel-bundler": "^1.12.4",
     "parcel-plugin-sw-cache": "^0.3.1",
     "typescript": "^3.7.2"
   },

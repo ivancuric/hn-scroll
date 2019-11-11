@@ -17,7 +17,7 @@ The app was built in [CodeSandbox](https://codesandbox.io/s/github/ivancuric/hn-
 
 Taking into account the requirements and the evaluation criteria for the task I've decided to avoid using a JS framework and have written it in "vanilla" TypeScript.
 
-The app is written in a way to minimize re-rendering and to display content as soon as possible without the need to reorder it. The responses are batched by network and frames.
+The app is written in a way to minimize re-rendering and to display content as soon as possible without the need to reorder it. The responses are batched by network responses, animation frames and finally batched into a single DOM update.
 
 Since the app is quite simple, I thought that it's easier to write the app logic in a single file while also being more readable.
 
@@ -40,3 +40,5 @@ I've thought about implementing a DOM node recycler, but there is no need in thi
 The design is very rudimentary (true to the original 😅). I didn't want to spend a lot of time desiging as it's not a part of the evaluation criteria, so I went with a GitHub markdown-like look.
 
 The UX is also a bit rough since there are no helpful error messages or loading indicators presented to the user. This is the area where most work could be done.
+
+Additionally, the scrolling could be made non-blocking by using tombstones/placeholders, viewport-dependent fetching in batches and allowing for non-sequential fetches. This would also require some FLIP animations to compensate for viewport shifting.
