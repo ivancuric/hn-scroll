@@ -8,7 +8,7 @@ import { Story } from './types';
   let firstIndexToRender = 0;
   let lastIndexToRender = -1; // compensate for first iteration cycle
 
-  let screenFull = false; // false if it can be filled with more items
+  let shouldLoadMoreItems = false; // false if it can be filled with more items
 
   const processedIndexes = new Set<number>();
   const workingIndexes = new Set<number>();
@@ -21,7 +21,7 @@ import { Story } from './types';
   const observer = new IntersectionObserver(entries => {
     const entry = entries[0];
 
-    screenFull = !entry.isIntersecting;
+    shouldLoadMoreItems = !entry.isIntersecting;
     if (entry.isIntersecting) {
       fetchNextBatch();
     }
@@ -108,7 +108,7 @@ import { Story } from './types';
 
     await render();
 
-    if (!screenFull) {
+    if (!shouldLoadMoreItems) {
       fetchNextBatch();
     }
   };
@@ -119,7 +119,7 @@ import { Story } from './types';
 
     if (DEBUG_BATCHES) {
       fragment.append(
-        document.createRange().createContextualFragment('---------'),
+        document.createRange().createContextualFragment('<hr />'),
       );
     }
 

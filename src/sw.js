@@ -13,7 +13,7 @@ workbox.precaching.precacheAndRoute([]);
 workbox.routing.registerNavigationRoute('__PUBLIC/index.html');
 
 workbox.routing.registerRoute(
-  new RegExp(/https:\/\/hacker-news\.firebaseio\.com.*\.json/),
+  new RegExp(/https:\/\/hacker-news\.firebaseio\.com\/v0\/item\/\d*\.json/),
   new workbox.strategies.CacheFirst({
     cacheName: 'hacker-news-offline',
     plugins: [
