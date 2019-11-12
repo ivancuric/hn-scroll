@@ -1,0 +1,6 @@
+{
+  "short_name": "HN reader",
+  "name": "Hacker News List Viewer",
+  "start_url": ".",
+  "display": "standalone"
+}

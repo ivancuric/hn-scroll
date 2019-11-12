@@ -23,7 +23,7 @@ I've also written it as an IIFE instead of a `class` to make it more readable wi
 
 The app is using [Workbox](https://developers.google.com/web/tools/workbox) and service workers to cache responses and provide offline functionality.
 
-The app has zero dependencies (without the service worker) and is under 2KB before gzipping, a lot of it being [Parcel](https://parceljs.org/)'s module loader.
+The app has zero dependencies (without the service worker) and is under 2KB before gzipping, a lot of it being [Parcel](https://parceljs.org/)'s module loader. It also scores 100 on Lighthouse.
 
 ## Thoughts and potential for upgrades
 
