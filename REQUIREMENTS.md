@@ -1,10 +1,10 @@
-**Web Developer Test Project - Hacker News Reader**
+# Web Developer Test Project - Hacker News Reader
 
 You will be building a news reader app which displays the latest[ Hacker News](https://news.ycombinator.com/) stories. Your app will leverage the[ Hacker News API](https://github.com/HackerNews/API) to fetch data it requires.
 
 _Note: We will abbreviate Hacker News as HN for this project._
 
-# **Requirements**
+## Requirements
 
 The app will be a single page web app will the following features:
 
@@ -20,7 +20,7 @@ The app will be a single page web app will the following features:
 
 - You can assume that the app will only be run on modern browsers, hence feel free to use latest web spec if needed.
 
-# **Evaluation Criteria**
+## Evaluation Criteria
 
 - App performance. We will be looking at the wait times for reader to see the content — the shorter, the better.
 
@@ -28,7 +28,7 @@ The app will be a single page web app will the following features:
 
 - We prefer the project to be lightweight, and all dependencies should be well justified.
 
-# **Deliverable**
+## Deliverable
 
 - Upload your test project as a public repository on Github. Please make sure to include a readme file with instructions on how to run your app.
 
