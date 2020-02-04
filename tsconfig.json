@@ -8,5 +8,6 @@
     "target": "esnext",
     "rootDir": "src",
     "moduleResolution": "node"
-  }
+  },
+  "exclude": ["node_modules", "dist", "src/sw.js"]
 }
