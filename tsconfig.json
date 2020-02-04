@@ -7,7 +7,7 @@
     "allowJs": true,
     "target": "esnext",
     "rootDir": "src",
+    "outDir": "dist",
     "moduleResolution": "node"
-  },
-  "exclude": ["node_modules", "dist", "src/sw.js"]
+  }
 }

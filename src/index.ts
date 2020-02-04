@@ -68,13 +68,17 @@ const DEBUG_BATCHES = false; // set to true to see batches
 
     // fetch each and add them to the processed stories array
     workingIndexes.forEach(async storyIndex => {
-      const story = await fetchStory(newStoryIDs[storyIndex]).catch(() =>
+      let story = await fetchStory(newStoryIDs[storyIndex]).catch(() =>
         console.error(`Error fetching story ${newStoryIDs[storyIndex]}`),
       );
 
+      // in case there is a malformed response, the show must go on
       if (!story) {
-        return;
+        story = {
+          title: undefined,
+        } as Story;
       }
+
       processedStories[storyIndex] = story;
       // when each story is done fetching, add it to the pipeline
       addToBatchPipeline(storyIndex);
@@ -133,6 +137,7 @@ const DEBUG_BATCHES = false; // set to true to see batches
 
     renderQueue.forEach(index => {
       const item: Story = processedStories[index];
+      console.log(item);
       fragment.append(listItem(index, item));
     });
 
