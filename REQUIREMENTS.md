@@ -12,7 +12,7 @@ The app will be a single page web app will the following features:
 
 - The targeted users for this app are exceptionally inpatient, so the app needs to display each HN list item _as soon as it has been fetched_. The resulting list will look like it is populating new items one-by-one, as seen below.
 
-![image alt text](image_0.gif)
+![image alt text](image1.gif)
 
 - The app should support infinite scroll (like Facebook News Feed). Specifically, when the user reaches the bottom of the page, the app should fetch earlier items and display them.
 
