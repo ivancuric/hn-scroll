@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.html",
+  "homepage": "https://github.com/ivancuric/hn-scroll",
   "scripts": {
     "start": "parcel index.html --open",
     "build": "parcel build index.html"
