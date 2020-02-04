@@ -13,7 +13,7 @@ If you want to run the app in production mode use `yarn build` to build the prod
 
 ## Choice of tools and technology
 
-The app was built in [CodeSandbox](https://codesandbox.io/s/github/ivancuric/hn-scroll) and then finished up locally to get the service worker up and running.
+The app was built in [CodeSandbox](https://codesandbox.io/s/github/ivancuric/hn-scroll) and then finished up locally to get the service worker up and running. The repo is available on [https://github.com/ivancuric/hn-scroll](https://github.com/ivancuric/hn-scroll).
 
 Taking into account the requirements and the evaluation criteria for the task I've decided to avoid using a JS framework and have written it in "vanilla" TypeScript.
 
