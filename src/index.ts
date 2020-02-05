@@ -48,11 +48,13 @@ const DEBUG_BATCHES = false; // set to true to see batches
   };
 
   const fetchNextBatch = () => {
-    if (!shouldFetchMoreItems || workingIndexes.size || !newStoryIDs.length) {
+    if (!shouldFetchMoreItems || workingIndexes.size) {
       return;
     }
 
     lastIndexToRender += STORIES_UNDER_FOLD;
+
+    console.log(newStoryIDs.length);
 
     // prevent overflow
     if (lastIndexToRender >= newStoryIDs.length) {
