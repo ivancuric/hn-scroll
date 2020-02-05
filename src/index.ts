@@ -3,7 +3,7 @@ import { fetchStory, fetchAllNewStories } from './api';
 import { listItem } from './listItem';
 
 // CONFIG
-const STORIES_TO_FETCH = 20;
+const STORIES_UNDER_FOLD = 20;
 const DEBUG_BATCHES = false; // set to true to see batches
 
 (() => {
@@ -11,12 +11,12 @@ const DEBUG_BATCHES = false; // set to true to see batches
   let firstIndexToRender = 0;
   let lastIndexToRender = -1; // compensate for first iteration cycle
 
-  let shouldLoadMoreItems = false; // false if it can be filled with more items
+  let shouldFetchMoreItems = false; // false if it can be filled with more items
 
   const newStoryIDs: number[] = [];
   const processedIndexes = new Set<number>();
   const workingIndexes = new Set<number>();
-  const processedStories: Story[] = [];
+  const processedStories: (Story | void)[] = []; // possible malformed response
   const renderQueue: number[] = [];
 
   const list = document.getElementById('list');
@@ -42,19 +42,17 @@ const DEBUG_BATCHES = false; // set to true to see batches
   const onIntersect = (entries: IntersectionObserverEntry[]) => {
     const entry = entries[0];
 
-    shouldLoadMoreItems = !entry.isIntersecting;
-    if (entry.isIntersecting) {
-      fetchNextBatch();
-    }
+    shouldFetchMoreItems = entry.isIntersecting;
+
+    fetchNextBatch();
   };
 
   const fetchNextBatch = () => {
-    // return if there are any in the workingIndexSet + make TS happy
-    if (workingIndexes.size || !newStoryIDs) {
+    if (!shouldFetchMoreItems || workingIndexes.size || !newStoryIDs.length) {
       return;
     }
 
-    lastIndexToRender += STORIES_TO_FETCH;
+    lastIndexToRender += STORIES_UNDER_FOLD;
 
     // prevent overflow
     if (lastIndexToRender >= newStoryIDs.length) {
@@ -68,16 +66,9 @@ const DEBUG_BATCHES = false; // set to true to see batches
 
     // fetch each and add them to the processed stories array
     workingIndexes.forEach(async storyIndex => {
-      let story = await fetchStory(newStoryIDs[storyIndex]).catch(() =>
+      const story = await fetchStory(newStoryIDs[storyIndex]).catch(() =>
         console.error(`Error fetching story ${newStoryIDs[storyIndex]}`),
       );
-
-      // in case there is a malformed response, the show must go on
-      if (!story) {
-        story = {
-          title: undefined,
-        } as Story;
-      }
 
       processedStories[storyIndex] = story;
       // when each story is done fetching, add it to the pipeline
@@ -120,9 +111,8 @@ const DEBUG_BATCHES = false; // set to true to see batches
 
     await render();
 
-    if (!shouldLoadMoreItems) {
-      fetchNextBatch();
-    }
+    // required to fill the initial screen
+    fetchNextBatch();
   };
 
   // batch by DOM nodes and append to DOM
@@ -136,9 +126,8 @@ const DEBUG_BATCHES = false; // set to true to see batches
     }
 
     renderQueue.forEach(index => {
-      const item: Story = processedStories[index];
-      console.log(item);
-      fragment.append(listItem(index, item));
+      const item = processedStories[index];
+      item && fragment.append(listItem(index, item));
     });
 
     list.append(fragment);

@@ -1,11 +1,10 @@
 {
   "compilerOptions": {
-    "module": "esnext",
-    "jsx": "preserve",
+    "module": "ESnext",
     "esModuleInterop": true,
     "sourceMap": true,
     "allowJs": true,
-    "target": "esnext",
+    "target": "ESnext",
     "rootDir": "src",
     "outDir": "dist",
     "moduleResolution": "node"
