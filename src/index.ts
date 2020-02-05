@@ -13,11 +13,11 @@ const DEBUG_BATCHES = false; // set to true to see batches
 
   let shouldFetchMoreItems = false; // false if it can be filled with more items
 
-  const newStoryIDs: number[] = [];
+  const newStoryIDs: number[] = []; // array because we need it indexed
   const processedIndexes = new Set<number>();
   const workingIndexes = new Set<number>();
   const processedStories: (Story | void)[] = []; // possible malformed response
-  const renderQueue: number[] = [];
+  const renderQueue = new Set<number>();
 
   const list = document.getElementById('list');
 
@@ -53,8 +53,6 @@ const DEBUG_BATCHES = false; // set to true to see batches
     }
 
     lastIndexToRender += STORIES_UNDER_FOLD;
-
-    console.log(newStoryIDs.length);
 
     // prevent overflow
     if (lastIndexToRender >= newStoryIDs.length) {
@@ -104,10 +102,11 @@ const DEBUG_BATCHES = false; // set to true to see batches
 
   // batch by frames and forward to render
   const pushToRenderQueue = async (currentBatch: number[]) => {
-    renderQueue.push(...currentBatch);
+    // renderQueue.push(...currentBatch);
+    currentBatch.forEach(renderQueue.add, renderQueue);
     await new Promise(requestAnimationFrame);
 
-    if (renderQueue.length === 0) {
+    if (!renderQueue.size) {
       return;
     }
 
@@ -133,7 +132,7 @@ const DEBUG_BATCHES = false; // set to true to see batches
     });
 
     list.append(fragment);
-    renderQueue.length = 0;
+    renderQueue.clear();
 
     return true;
   };
