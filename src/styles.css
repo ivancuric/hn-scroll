@@ -42,7 +42,7 @@ h1 {
   contain: strict;
   pointer-events: none;
   z-index: -1;
-  background: #bada55;
+  /* background: #bada55; */
 }
 
 .sentinel-container {
