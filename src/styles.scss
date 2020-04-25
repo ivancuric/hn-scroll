@@ -13,8 +13,8 @@ body {
   padding: 0;
 }
 
-h1 {
-  margin-bottom: 1em;
+header {
+  margin-bottom: 2em;
 }
 
 #list {
@@ -25,6 +25,19 @@ h1 {
 .list-item {
   contain: content;
   display: flex;
+
+  > a {
+    color: inherit;
+    text-decoration: none;
+
+    &:visited {
+      color: #757575;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .count {

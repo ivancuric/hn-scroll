@@ -8,12 +8,17 @@
       name="Description"
       content="A simple app that shows a list of the latest 500 stories posted on Hacker News"
     />
-    <link rel="stylesheet" href="src/styles.css" />
+    <link rel="stylesheet" href="src/styles.scss" />
     <link rel="manifest" href="/manifest.webmanifest" />
   </head>
 
   <body>
-    <h1>Hacker News Story List</h1>
+    <header>
+      <h1>Hacker News Story List</h1>
+      <a href="https://github.com/ivancuric/hn-scroll"
+        >github.com/ivancuric/hn-scroll</a
+      >
+    </header>
     <ol id="list"></ol>
     <div class="sentinel-container">
       <div id="sentinel"></div>
