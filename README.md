@@ -9,7 +9,11 @@ yarn install
 yarn start
 ```
 
-If you want to run the app in production mode use `yarn build` to build the production bundle and `npx serve dist` (or some other HTTP server) to serve the `dist` directory locally.
+If you want to run the app in production mode use `yarn build` to build the production bundle and `npx serve dist` (or some other HTTP server) to serve the `dist` directory locally. The app can also be quickly edited on https://githubbox.com/ivancuric/hn-scroll.
+
+## Config
+
+You can set `DEBUG_BATCHES = true` to see the batched updates visually in the DOM. `STORIES_UNDER_FOLD` controls the stories fetched outside the viewport. You can uncomment the background of the `#sentinel` in styles.scss to see the behaviour of the `intersectionObserver`.
 
 ## Choice of tools and technology
 
