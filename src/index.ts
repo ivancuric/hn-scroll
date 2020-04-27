@@ -19,7 +19,7 @@ const DEBUG_BATCHES = false; // set to true to see batches
   const processedStories: (Story | void)[] = []; // possible malformed response
   const renderQueue = new Set<number>();
 
-  const list = document.getElementById('list');
+  const list = document.getElementById('list') as HTMLElement;
 
   // METHODS
   const start = async () => {
@@ -35,7 +35,8 @@ const DEBUG_BATCHES = false; // set to true to see batches
 
   const initObserver = () => {
     const observer = new IntersectionObserver(onIntersect);
-    const sentinel = document.getElementById('sentinel');
+    const sentinel = document.getElementById('sentinel') as HTMLElement;
+
     observer.observe(sentinel);
   };
 
